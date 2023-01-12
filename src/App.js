@@ -1,10 +1,55 @@
+import { useState } from "react";
 import "./styles.css";
 
 export default function App() {
+  const [customerId, setCustomerId] = useState(
+    sessionStorage.getItem("customerId")
+  );
+  const [siteId, setSiteId] = useState(sessionStorage.getItem("siteId"));
+
   return (
-    <div className="App">
-      <h1>Hello CodeSandbox </h1>
-      <h2>Start editing to see some magic happen!</h2>
-    </div>
+    <>
+      <h1>Zap Reviews</h1>
+      <div>
+        <label htmlFor="customerId">Zap Customer Id:</label> &nbsp;
+        <input
+          name="customerId"
+          id="customerId"
+          type="text"
+          value={customerId}
+          onChange={(e) => {
+            sessionStorage.setItem("customerId", e.target.value);
+            setCustomerId(e.target.value);
+          }}
+        />
+      </div>
+      <div>
+        <label htmlFor="siteId">Site:</label> &nbsp;
+        <select
+          name="siteId"
+          id="siteId"
+          onChange={(e) => {
+            sessionStorage.setItem("siteId", e.target.value);
+            setSiteId(e.target.value);
+          }}
+          value={siteId}
+          defaultValue=""
+        >
+          <option value="" disabled hidden>
+            נא לבחור אתר
+          </option>
+          <option value="5">דפי זהב</option>
+          <option value="3">רסט</option>
+          <option value="2">מתחתנים</option>
+        </select>
+      </div>
+      <div>
+        <zap-reviews
+          isTest="true"
+          customer-id={customerId}
+          site-id={siteId}
+        ></zap-reviews>{" "}
+      </div>
+    </>
   );
 }
