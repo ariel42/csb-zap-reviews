@@ -2,8 +2,10 @@ import { useState } from "react";
 import "./styles.css";
 
 export default function App() {
-  const [customerId, setCustomerId] = useState();
-  const [siteId, setSiteId] = useState();
+  const [customerId, setCustomerId] = useState(
+    sessionStorage.getItem("customerId")
+  );
+  const [siteId, setSiteId] = useState(sessionStorage.getItem("siteId"));
 
   return (
     <>
@@ -15,7 +17,10 @@ export default function App() {
           id="customerId"
           type="text"
           value={customerId}
-          onChange={(e) => setCustomerId(e.target.value)}
+          onChange={(e) => {
+            sessionStorage.setItem("customerId", e.target.value);
+            setCustomerId(e.target.value);
+          }}
         />
       </div>
       <div>
@@ -23,7 +28,10 @@ export default function App() {
         <select
           name="siteId"
           id="siteId"
-          onChange={(e) => setSiteId(e.target.value)}
+          onChange={(e) => {
+            sessionStorage.setItem("siteId", e.target.value);
+            setSiteId(e.target.value);
+          }}
           value={siteId}
           defaultValue=""
         >
