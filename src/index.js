@@ -8,7 +8,7 @@ const root = createRoot(rootElement);
 
 if (typeof ZapReviewsElement === "undefined") {
   const script = document.createElement("script");
-  script.src = `${location.origin}/zap-reviews.js?${Math.random()}`;
+  script.src = `https://zap.dbusiness.co/js/zap-reviews.js?${Math.random()}`;
   document.body.appendChild(script);
 }
 

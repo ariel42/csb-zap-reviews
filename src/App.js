@@ -36,7 +36,11 @@ export default function App() {
         </select>
       </div>
       <div>
-        <zap-reviews customer-id={customerId} site-id={siteId}></zap-reviews>
+        <zap-reviews
+          isTest="true"
+          customer-id={customerId}
+          site-id={siteId}
+        ></zap-reviews>{" "}
       </div>
     </>
   );
