@@ -6,10 +6,9 @@ import App from "./App";
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 
+//if real zap-reviews.js is commented in index.html, load it here for development
 if (typeof ZapReviewsElement === "undefined") {
-  const script = document.createElement("script");
-  script.src = `https://zap.dbusiness.co/js/zap-reviews.js?${Math.random()}`;
-  document.body.appendChild(script);
+  import("./zap-reviews");
 }
 
 root.render(

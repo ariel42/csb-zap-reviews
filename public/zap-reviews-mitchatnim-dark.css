@@ -1,0 +1,107 @@
+zap-reviews[site-id="2"] {
+}
+
+zap-reviews[site-id="2"] a {
+  margin-right: 2px;
+}
+
+zap-reviews[site-id="2"] .review_wp_outer {
+  text-align: justify;
+  margin-left: auto;
+  margin-right: auto;
+  border-width: 0;
+  border-style: solid;
+  border-color: #000000;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-bottom: 10px;
+  padding-top: 40px;
+}
+
+zap-reviews[site-id="2"] .review_maintitle {
+  font-size: inherit;
+}
+
+zap-reviews[site-id="2"] .review_title {
+  font-weight: bold;
+  font-size: 18px;
+  border-width: 0;
+  border-style: solid;
+  border-color: #000000;
+}
+
+zap-reviews[site-id="2"] .review_text {
+  color: #3e3e3e;
+  border-width: 0;
+  border-style: solid;
+  border-color: #000000;
+}
+
+zap-reviews[site-id="2"] .review_text svg {
+  fill: #3e3e3e;
+}
+
+zap-reviews[site-id="2"] .review_date {
+  color: #999999;
+  line-height: 30px;
+  vertical-align: top;
+}
+
+zap-reviews[site-id="2"] .review_date svg {
+  fill: #999999;
+}
+
+zap-reviews[site-id="2"] .pagination {
+  color: #62973b;
+  margin-right: 78px;
+}
+
+zap-reviews[site-id="2"] .pagination svg {
+  fill: #62973b;
+}
+
+zap-reviews[site-id="2"] .review_imagebox {
+  width: 80px;
+}
+
+zap-reviews[site-id="2"] .review_image {
+  border-width: 5px;
+  border-style: solid;
+  border-color: #efebe7;
+  width: 50px;
+  height: 50px;
+}
+
+zap-reviews[site-id="2"] .review_header {
+  border-width: 0px 0px 1px 0px;
+  border-style: solid;
+  border-color: #cecfce;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+}
+
+zap-reviews[site-id="2"] .review_headertitle {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+zap-reviews[site-id="2"] .review_headertext {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+zap-reviews[site-id="2"] .review_username {
+  font-weight: normal;
+  color: #efaed6;
+  font-size: 18px;
+  font-style: normal;
+}
+
+zap-reviews[site-id="2"] .review_username svg {
+  fill: #efaed6;
+}
+
+zap-reviews[site-id="2"] .review_scoretext {
+  line-height: 30px;
+  vertical-align: top;
+}

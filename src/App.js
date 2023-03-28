@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./styles.css";
 
 export default function App() {
+  const [theme, setTheme] = useState(sessionStorage.getItem("theme"));
   const [customerId, setCustomerId] = useState(
     sessionStorage.getItem("customerId")
   );
@@ -11,15 +12,15 @@ export default function App() {
     <>
       <h1>Zap Reviews</h1>
       <div>
-        <label htmlFor="customerId">Zap Customer Id:</label> &nbsp;
+        <label htmlFor="theme">Theme:</label> &nbsp;
         <input
-          name="customerId"
-          id="customerId"
+          name="theme"
+          id="theme"
           type="text"
-          value={customerId}
+          value={theme}
           onChange={(e) => {
-            sessionStorage.setItem("customerId", e.target.value);
-            setCustomerId(e.target.value);
+            sessionStorage.setItem("theme", e.target.value);
+            setTheme(e.target.value);
           }}
         />
       </div>
@@ -44,8 +45,22 @@ export default function App() {
         </select>
       </div>
       <div>
+        <label htmlFor="customerId">Zap Customer Id:</label> &nbsp;
+        <input
+          name="customerId"
+          id="customerId"
+          type="text"
+          value={customerId}
+          onChange={(e) => {
+            sessionStorage.setItem("customerId", e.target.value);
+            setCustomerId(e.target.value);
+          }}
+        />
+      </div>
+      <div>
         <zap-reviews
           isTest="true"
+          theme={theme}
           customer-id={customerId}
           site-id={siteId}
         ></zap-reviews>{" "}
