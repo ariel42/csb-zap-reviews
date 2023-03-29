@@ -1,46 +1,46 @@
-zap-reviews[site-id="5"] {
+:host {
 }
 
-zap-reviews[site-id="5"] .review_wp_outer {
+.review_wp_outer {
   text-align: justify;
   padding-left: 20px;
   padding-right: 20px;
 }
 
-zap-reviews[site-id="5"] .review_maintitle {
+.review_maintitle {
   font-weight: bold;
   font-size: 18px;
   padding-top: 10px;
 }
 
-zap-reviews[site-id="5"] .review_title {
+.review_title {
   font-weight: bold;
   font-size: 18px;
 }
 
-zap-reviews[site-id="5"] .review_text {
+.review_text {
   color: #2b2b2b;
 }
 
-zap-reviews[site-id="5"] .review_text svg {
+.review_text svg {
   fill: #2b2b2b;
   stroke: #2b2b2b;
 }
 
-zap-reviews[site-id="5"] .review_date {
+.review_date {
   color: #2b2b2b;
 }
 
-zap-reviews[site-id="5"] .review_date svg {
+.review_date svg {
   fill: #2b2b2b;
   stroke: #2b2b2b;
 }
 
-zap-reviews[site-id="5"] .pagination {
+.pagination {
   color: #940000;
 }
 
-zap-reviews[site-id="5"] .pagination svg {
+.pagination svg {
   fill: #940000;
   stroke: #940000;
 }
