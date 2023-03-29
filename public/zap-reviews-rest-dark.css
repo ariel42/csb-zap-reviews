@@ -1,22 +1,22 @@
-zap-reviews[site-id="3"] {
+:host {
 }
 
-zap-reviews[site-id="3"] a {
+a {
   margin-top: 10px;
   color: #5c0d1e;
 }
 
-zap-reviews[site-id="3"] svg {
+svg {
   fill: #5c0d1e;
 }
 
-zap-reviews[site-id="3"] .review_wp_outer {
+.review_wp_outer {
   text-align: justify;
   margin-left: 40px;
   margin-right: 40px;
 }
 
-zap-reviews[site-id="3"] .review_content_wrap {
+.review_content_wrap {
   margin-bottom: 15px;
   padding-bottom: 10px;
   border-width: 0px 0px 1px 0px;
@@ -25,73 +25,73 @@ zap-reviews[site-id="3"] .review_content_wrap {
   margin-right: 20px;
 }
 
-zap-reviews[site-id="3"] .review_maintitle {
+.review_maintitle {
   font-weight: bold;
   font-size: 18px;
 }
 
-zap-reviews[site-id="3"] .review_title {
+.review_title {
   font-weight: bold;
   font-size: 18px;
   color: #741126;
   margin-left: 15px;
 }
 
-zap-reviews[site-id="3"] .review_title svg {
+.review_title svg {
   fill: #741126;
 }
 
-zap-reviews[site-id="3"] .review_text {
+.review_text {
   color: #000000;
   margin-top: 10px;
   line-height: 22px;
 }
 
-zap-reviews[site-id="3"] .review_text svg {
+.review_text svg {
   fill: #000000;
 }
 
-zap-reviews[site-id="3"] .review_date {
+.review_date {
   color: #000000;
 }
 
-zap-reviews[site-id="3"] .review_date svg {
+.review_date svg {
   fill: #000000;
 }
 
-zap-reviews[site-id="3"] .pagination {
+.pagination {
   color: #0066bc;
   padding-right: 18px;
 }
 
-zap-reviews[site-id="3"] .pagination svg {
+.pagination svg {
   fill: #0066bc;
 }
 
-zap-reviews[site-id="3"] .pagination a {
+.pagination a {
   color: #741126;
   font-weight: bold;
 }
 
-zap-reviews[site-id="3"] .pagination a svg {
+.pagination a svg {
   fill: #741126;
 }
 
-zap-reviews[site-id="3"] .pagination a:hover {
+.pagination a:hover {
   color: #000000;
 }
 
-zap-reviews[site-id="3"] .pagination a:hover svg {
+.pagination a:hover svg {
   fill: #000000;
 }
 
-zap-reviews[site-id="3"] .review_imagebox {
+.review_imagebox {
   margin-left: 20px;
   width: 60px;
   min-width: 60px;
 }
 
-zap-reviews[site-id="3"] .review_image {
+.review_image {
   width: 50px;
   height: 50px;
   border-width: 6px;
@@ -99,7 +99,7 @@ zap-reviews[site-id="3"] .review_image {
   border-color: #ebe7e4;
 }
 
-zap-reviews[site-id="3"] .review_header {
+.review_header {
   border-width: 0px 0px 1px 0px;
   border-style: solid;
   border-color: #cccccc;
@@ -107,12 +107,12 @@ zap-reviews[site-id="3"] .review_header {
   margin-bottom: 30px;
 }
 
-zap-reviews[site-id="3"] .review_headertitle {
+.review_headertitle {
   font-size: 22px;
   line-height: 22px;
 }
 
-zap-reviews[site-id="3"] .review_username {
+.review_username {
   font-size: 13px;
   text-align: center;
   word-wrap: break-word;
@@ -120,6 +120,6 @@ zap-reviews[site-id="3"] .review_username {
   word-break: break-word;
 }
 
-zap-reviews[site-id="3"] .review_username svg {
+.review_username svg {
   fill: #000000;
 }

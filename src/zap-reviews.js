@@ -219,6 +219,8 @@ class ZapReviewsLoader {
 }
 
 class ZapReviewsElement extends globalThis.HTMLElement {
+  connectedCallbackRan = false;
+  shadow = null;
   randomId = Math.floor(Math.random() * 1000000);
   reviewsLoader = null;
   isTest = false;
@@ -230,6 +232,8 @@ class ZapReviewsElement extends globalThis.HTMLElement {
 
   constructor() {
     super();
+
+    this.shadow = this.attachShadow({ mode: "closed" });
   }
 
   connectedCallback() {
@@ -243,7 +247,10 @@ class ZapReviewsElement extends globalThis.HTMLElement {
       fontsStyleElement.setAttribute("id", "reviews-font");
       fontsStyleElement.setAttribute("rel", "stylesheet");
       fontsStyleElement.setAttribute("type", "text/css");
-      fontsStyleElement.setAttribute("href", "https://fonts.googleapis.com/earlyaccess/opensanshebrew.css");
+      fontsStyleElement.setAttribute(
+        "href",
+        "https://fonts.googleapis.com/earlyaccess/opensanshebrew.css"
+      );
       document.head.appendChild(fontsStyleElement);
     }
 
@@ -254,12 +261,22 @@ class ZapReviewsElement extends globalThis.HTMLElement {
       this[camelCased] = this.getAttribute(attribute)?.trim() || null;
     }
 
-    this.reloadStyles();
     this.renderDefaultHtml();
-    this.loadFirstReview();
+
+    if (+this.siteId) {
+      this.reloadStyles();
+
+      if (this.customerId) {
+        this.loadFirstReview();
+      }
+    }
+
+    this.connectedCallbackRan = true;
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
+    if (!this.connectedCallbackRan) return;
+
     const camelCased = name.replace(/-([a-z])/g, function (g) {
       return g[1].toUpperCase();
     });
@@ -275,42 +292,43 @@ class ZapReviewsElement extends globalThis.HTMLElement {
     }
   }
 
-  reloadStyles() {
-    [...this.querySelectorAll(".zap-reviews-css")].forEach((e) =>
-      e.remove()
-    );
-
+  async reloadStyles() {
     const suffix = this.theme?.trim() ? `-${this.theme?.trim()}` : "";
 
-    const reviewsStyleElement = document.createElement("link");
-    reviewsStyleElement.classList.add("zap-reviews-css");
-    reviewsStyleElement.setAttribute("id", `reviews-style${suffix}`);
-    reviewsStyleElement.setAttribute("rel", "stylesheet");
-    reviewsStyleElement.setAttribute("type", "text/css");
-    reviewsStyleElement.setAttribute("href",
-      `${this.cssPath}/zap-reviews${suffix}.css${this.isTest ? "?r=" + Math.random() : ""}`
-    );
-    this.prepend(reviewsStyleElement);
+    const globalStyleTask = fetch(
+      `${this.cssPath}/zap-reviews${suffix}.css${
+        this.isTest ? "?r=" + Math.random() : ""
+      }`
+    ).then((res) => res.text());
 
-    if (+this.siteId) {
-      const siteStyleElement = document.createElement("link");
-      siteStyleElement.classList.add("zap-reviews-css");
-      siteStyleElement.setAttribute("id", `reviews-style-${this.siteId}${suffix}`);
-      siteStyleElement.setAttribute("rel", "stylesheet");
-      siteStyleElement.setAttribute("type", "text/css");
-
-      let filename = `zap-reviews-dpz${suffix}`;
-      if (this.siteId == 2) {
-        filename = `zap-reviews-mitchatnim${suffix}`;
-      } else if (this.siteId == 3) {
-        filename = `zap-reviews-rest${suffix}`;
-      }
-      siteStyleElement.setAttribute("href",
-        `${this.cssPath}/${filename}.css${this.isTest ? "?r=" + Math.random() : ""}`
-      );
-
-      reviewsStyleElement.after(siteStyleElement);
+    let siteFilename = `zap-reviews-dpz${suffix}`;
+    if (this.siteId == 2) {
+      siteFilename = `zap-reviews-mitchatnim${suffix}`;
+    } else if (this.siteId == 3) {
+      siteFilename = `zap-reviews-rest${suffix}`;
     }
+
+    siteFilename += `.css${this.isTest ? "?r=" + Math.random() : ""}`;
+    const siteStyleTask = fetch(`${this.cssPath}/${siteFilename}`).then((res) =>
+      res.text()
+    );
+
+    const [globalStyle, siteStyle] = await Promise.all([
+      globalStyleTask,
+      siteStyleTask,
+    ]);
+
+    this.shadow.querySelector(".zap-reviews-global")?.remove();
+    const reviewsStyleElement = document.createElement("style");
+    reviewsStyleElement.classList.add("zap-reviews-global");
+    this.shadow.prepend(reviewsStyleElement);
+    reviewsStyleElement.appendChild(document.createTextNode(globalStyle));
+
+    this.shadow.querySelector(".zap-reviews-site")?.remove();
+    const siteStyleElement = document.createElement("style");
+    siteStyleElement.classList.add("zap-reviews-site");
+    reviewsStyleElement.after(siteStyleElement);
+    siteStyleElement.appendChild(document.createTextNode(siteStyle));
   }
 
   renderDefaultHtml() {
@@ -322,7 +340,8 @@ class ZapReviewsElement extends globalThis.HTMLElement {
   }
 
   loadFirstReview() {
-    if (+this.siteId && +this.customerId?.split("_")?.[0]) { //again for supporting customerId_70025020 migrations
+    if (+this.siteId && +this.customerId?.split("_")?.[0]) {
+      //again for supporting customerId_70025020 migrations
       this.initLoaderIfNeeded();
       this.reviewsLoader.getReviews("1");
     }
@@ -350,18 +369,16 @@ class ZapReviewsElement extends globalThis.HTMLElement {
   }
 
   setReviewsContent(reviewsHtml) {
-    this.querySelector(".reviews")?.remove();
-    this.querySelector(".pagination")?.remove();
-    
-    this.insertAdjacentHTML('beforeend',
-      `${(reviewsHtml || '')
-        .trim()
-        .replaceAll(`src="/images`, `src="https://${assetsProdHost}/images`)
-        .replaceAll(
-          `<div class="score_stars scores_stars_review" />`,
-          `<div class="score_stars scores_stars_review"></div>`
-        )}`
-    );
+    this.shadow.querySelector(".reviews")?.remove();
+    this.shadow.querySelector(".pagination")?.remove();
+
+    this.shadow.innerHTML += `${(reviewsHtml || "")
+      .trim()
+      .replaceAll(`src="/images`, `src="https://${assetsProdHost}/images`)
+      .replaceAll(
+        `<div class="score_stars scores_stars_review" />`,
+        `<div class="score_stars scores_stars_review"></div>`
+      )}`;
   }
 
   static get observedAttributes() {
