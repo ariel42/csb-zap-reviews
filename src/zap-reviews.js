@@ -381,7 +381,7 @@ class ZapReviewsElement extends globalThis.HTMLElement {
         "True", //the output html will have links and classes with this reviews${this.randomId} in their names
         "False",
         1000,
-        3,
+        1,
         true,
         false,
         45,
