@@ -67,7 +67,7 @@ const wrapperDiv = (siteId, customerId, score, numReviews) => {
 
 const apiHost = "zap.dbusiness.co";
 const cssHostPathProd = "https://zap.dbusiness.co/css";
-const cssHostPathTest = "https://github.com/ariel42/csb-zap-reviews/blob/dev/public";
+const cssHostPathTest = "https://raw.githubusercontent.com/ariel42/csb-zap-reviews/dev/public";
 
 class ZapScoreElement extends HTMLElement {
   connectedCallbackRan = false;

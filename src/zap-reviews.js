@@ -120,7 +120,7 @@ const getEmptyReviewsHtml = (customerId, siteId) => {
 const apiHost = "tokyo-newapi-branches.d.zapweb.co.il";
 const assetsOriginProd = "https://zap.dbusiness.co";
 const cssHostPathProd = `${assetsOriginProd}/css`;
-const cssHostPathTest = "https://github.com/ariel42/csb-zap-reviews/blob/dev/public";
+const cssHostPathTest = "https://raw.githubusercontent.com/ariel42/csb-zap-reviews/dev/public";
 
 class ZapReviewsLoader {
   zapReviewsInstance = null;
