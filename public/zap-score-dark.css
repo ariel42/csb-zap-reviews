@@ -1,0 +1,85 @@
+:host {
+  display: block;
+  height: auto;
+  width: 180px;
+  font-family: Open Sans Hebrew;
+  font-size: 14px;
+  text-align: justify;
+  direction: rtl;
+  line-height: 23px;
+  cursor: pointer;
+}
+
+:host(:hover) {
+  opacity: 0.8;
+}
+
+.score_wrap {
+  padding-top: 20px;
+}
+
+.score_num {
+  font-weight: bold;
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+  padding-top: 5px;
+}
+
+.score_text {
+  font-size: 14px;
+  text-align: center;
+  top: -5px;
+}
+
+.score_logo {
+  text-align: center;
+}
+
+.score_logo img {
+  width: 90px;
+}
+
+.score_stars {
+  position: relative;
+  height: auto;
+  min-height: 25px;
+  margin: auto;
+  text-align: justify;
+  bottom: 0;
+  width: 90px;
+}
+
+.score_stars_floorforce {
+  position: relative;
+  height: auto;
+  min-height: 25px;
+  margin: auto;
+  text-align: justify;
+  bottom: 0;
+  width: 100px
+}
+
+.score_stars img {
+  display: inline;
+}
+
+.stars {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  direction: ltr;
+  font-size: 0;
+}
+
+.stars_over {
+  position: absolute !important;
+  color: #ebca00;
+  top: 0;
+  left: 0;
+  direction: ltr;
+  font-size: 0;
+  height: 30px;
+  overflow: hidden;
+  white-space: nowrap;
+}

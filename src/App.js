@@ -1,12 +1,12 @@
 import { useState } from "react";
 import "./styles.css";
 
-export default function App() {
-  const [theme, setTheme] = useState(sessionStorage.getItem("theme"));
+function ZapReviews() {
+  const [theme, setTheme] = useState(sessionStorage.getItem("reviews-theme"));
   const [customerId, setCustomerId] = useState(
-    sessionStorage.getItem("customerId")
+    sessionStorage.getItem("reviews-customerId")
   );
-  const [siteId, setSiteId] = useState(sessionStorage.getItem("siteId"));
+  const [siteId, setSiteId] = useState(sessionStorage.getItem("reviews-siteId"));
 
   return (
     <>
@@ -19,7 +19,7 @@ export default function App() {
           type="text"
           value={theme}
           onChange={(e) => {
-            sessionStorage.setItem("theme", e.target.value);
+            sessionStorage.setItem("reviews-theme", e.target.value);
             setTheme(e.target.value);
           }}
         />
@@ -30,7 +30,7 @@ export default function App() {
           name="siteId"
           id="siteId"
           onChange={(e) => {
-            sessionStorage.setItem("siteId", e.target.value);
+            sessionStorage.setItem("reviews-siteId", e.target.value);
             setSiteId(e.target.value);
           }}
           value={siteId}
@@ -52,19 +52,95 @@ export default function App() {
           type="text"
           value={customerId}
           onChange={(e) => {
-            sessionStorage.setItem("customerId", e.target.value);
+            sessionStorage.setItem("reviews-customerId", e.target.value);
             setCustomerId(e.target.value);
           }}
         />
       </div>
       <div>
         <zap-reviews
-          isTest="true"
+          isDev="true"
           theme={theme}
           customer-id={customerId}
           site-id={siteId}
-        ></zap-reviews>{" "}
+        ></zap-reviews>
       </div>
     </>
   );
+}
+
+function ZapScores() {
+  const [theme, setTheme] = useState(sessionStorage.getItem("score-theme"));
+  const [customerId, setCustomerId] = useState(
+    sessionStorage.getItem("score-customerId")
+  );
+  const [siteId, setSiteId] = useState(sessionStorage.getItem("score-siteId"));
+
+  return (
+    <>
+      <h1>Zap Score</h1>
+      <div>
+        <label htmlFor="theme">Theme:</label> &nbsp;
+        <input
+          name="theme"
+          id="theme"
+          type="text"
+          value={theme}
+          onChange={(e) => {
+            sessionStorage.setItem("score-theme", e.target.value);
+            setTheme(e.target.value);
+          }}
+        />
+      </div>
+      <div>
+        <label htmlFor="siteId">Site:</label> &nbsp;
+        <select
+          name="siteId"
+          id="siteId"
+          onChange={(e) => {
+            sessionStorage.setItem("score-siteId", e.target.value);
+            setSiteId(e.target.value);
+          }}
+          value={siteId}
+          defaultValue=""
+        >
+          <option value="" disabled hidden>
+            נא לבחור אתר
+          </option>
+          <option value="5">דפי זהב</option>
+          <option value="3">רסט</option>
+        </select>
+      </div>
+      <div>
+        <label htmlFor="customerId">Zap Customer Id:</label> &nbsp;
+        <input
+          name="customerId"
+          id="customerId"
+          type="text"
+          value={customerId}
+          onChange={(e) => {
+            sessionStorage.setItem("score-customerId", e.target.value);
+            setCustomerId(e.target.value);
+          }}
+        />
+      </div>
+      <div>
+        <zap-score
+          isDev="true"
+          theme={theme}
+          customer-id={customerId}
+          site-id={siteId}
+        ></zap-score>
+      </div>
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <>
+      <ZapReviews></ZapReviews>
+      <ZapScores></ZapScores>
+    </>
+  )
 }
