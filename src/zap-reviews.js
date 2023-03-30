@@ -118,8 +118,9 @@ const getEmptyReviewsHtml = (customerId, siteId) => {
 };
 
 const apiHost = "tokyo-newapi-branches.d.zapweb.co.il";
-const assetsProdHost = "zap.dbusiness.co";
-const assetsTestHost = "so3zmf-3000.csb.app";
+const assetsOriginProd = "https://zap.dbusiness.co";
+const cssHostPathProd = `${assetsOriginProd}/css`;
+const cssHostPathTest = "https://github.com/ariel42/csb-zap-reviews/blob/dev/public";
 
 class ZapReviewsLoader {
   zapReviewsInstance = null;
@@ -180,7 +181,7 @@ class ZapReviewsLoader {
     const params = {
       sCustomerId:
         this.zapReviewsInstance.siteId == 3
-          ? `${this.zapReviewsInstance.customerId.split("_")?.[0]}_70025020` //for Rest it should be customerId_70025020 (Rest's resturants tag id)
+          ? `${this.zapReviewsInstance.customerId}_70025020` //for Rest it should be customerId_70025020 (Rest's resturants tag id)
           : this.zapReviewsInstance.customerId,
       iSiteID: this.zapReviewsInstance.siteId,
       sHeadingCode: "",
@@ -223,8 +224,8 @@ class ZapReviewsElement extends globalThis.HTMLElement {
   shadow = null;
   randomId = Math.floor(Math.random() * 1000000);
   reviewsLoader = null;
-  isTest = false;
-  cssPath = `https://${assetsProdHost}/css`;
+  ignoreCssCache = true;
+  cssPath = cssHostPathProd;
   theme = "";
 
   customerId = null;
@@ -237,9 +238,15 @@ class ZapReviewsElement extends globalThis.HTMLElement {
   }
 
   connectedCallback() {
-    this.isTest = this.getAttribute("isTest");
-    if (this.isTest) {
-      this.cssPath = `https://${assetsTestHost}`;
+    const isTest = this.getAttribute("isTest");
+    const isDev = this.getAttribute("isDev");
+    this.ignoreCssCache = isTest || isDev;
+
+    if (isTest) {
+      this.cssPath = cssHostPathTest;
+    }
+    if (isDev) {
+      this.cssPath = `${window.location.origin}`;
     }
 
     if (!document.querySelector("#reviews-font")) {
@@ -247,10 +254,7 @@ class ZapReviewsElement extends globalThis.HTMLElement {
       fontsStyleElement.setAttribute("id", "reviews-font");
       fontsStyleElement.setAttribute("rel", "stylesheet");
       fontsStyleElement.setAttribute("type", "text/css");
-      fontsStyleElement.setAttribute(
-        "href",
-        "https://fonts.googleapis.com/earlyaccess/opensanshebrew.css"
-      );
+      fontsStyleElement.setAttribute("href", "https://fonts.googleapis.com/earlyaccess/opensanshebrew.css");
       document.head.appendChild(fontsStyleElement);
     }
 
@@ -260,13 +264,16 @@ class ZapReviewsElement extends globalThis.HTMLElement {
       });
       this[camelCased] = this.getAttribute(attribute)?.trim() || null;
     }
+    if (this.customerId) {
+      this.customerId = this.customerId.split('_')[0]; //for supporting migrations with customerId_70025020 value in this attribute
+    }
 
     this.renderDefaultHtml();
 
     if (+this.siteId) {
       this.reloadStyles();
 
-      if (this.customerId) {
+      if (+this.customerId) {
         this.loadFirstReview();
       }
     }
@@ -280,7 +287,13 @@ class ZapReviewsElement extends globalThis.HTMLElement {
     const camelCased = name.replace(/-([a-z])/g, function (g) {
       return g[1].toUpperCase();
     });
-    this[camelCased] = newValue?.trim() || "";
+    if (this[camelCased] == newValue) return;
+
+    this[camelCased] = newValue?.trim() || null;
+
+    if (name === 'customer-id' && this.customerId) {
+      this.customerId = this.customerId.split('_')[0]; //see above
+    }
 
     if (["site-id", "theme"].includes(name)) {
       this.reloadStyles();
@@ -288,7 +301,10 @@ class ZapReviewsElement extends globalThis.HTMLElement {
 
     if (["customer-id", "site-id"].includes(name)) {
       this.renderDefaultHtml();
-      this.loadFirstReview();
+
+      if (+this.customerId && +this.siteId) {
+        this.loadFirstReview();
+      }
     }
   }
 
@@ -296,9 +312,8 @@ class ZapReviewsElement extends globalThis.HTMLElement {
     const suffix = this.theme?.trim() ? `-${this.theme?.trim()}` : "";
 
     const globalStyleTask = fetch(
-      `${this.cssPath}/zap-reviews${suffix}.css${
-        this.isTest ? "?r=" + Math.random() : ""
-      }`
+      `${this.cssPath}/zap-reviews${suffix}.css`,
+      { cache: this.ignoreCssCache ? "no-store" : "default" }
     ).then((res) => res.text());
 
     let siteFilename = `zap-reviews-dpz${suffix}`;
@@ -307,11 +322,12 @@ class ZapReviewsElement extends globalThis.HTMLElement {
     } else if (this.siteId == 3) {
       siteFilename = `zap-reviews-rest${suffix}`;
     }
+    siteFilename += '.css';
 
-    siteFilename += `.css${this.isTest ? "?r=" + Math.random() : ""}`;
-    const siteStyleTask = fetch(`${this.cssPath}/${siteFilename}`).then((res) =>
-      res.text()
-    );
+    const siteStyleTask = fetch(
+      `${this.cssPath}/${siteFilename}`,
+      { cache: this.ignoreCssCache ? "no-store" : "default" }
+    ).then((res) => res.text());
 
     const [globalStyle, siteStyle] = await Promise.all([
       globalStyleTask,
@@ -331,20 +347,29 @@ class ZapReviewsElement extends globalThis.HTMLElement {
     siteStyleElement.appendChild(document.createTextNode(siteStyle));
   }
 
-  renderDefaultHtml() {
-    const emptyReviewsHtml = getEmptyReviewsHtml(
-      this.customerId?.split("_")?.[0] || "", //needed for Rest that may get here customerId_70025020 (Rest's resturants tag id) from some migrations
-      this.siteId
-    );
-    this.setReviewsContent(emptyReviewsHtml);
+  loadFirstReview() {
+    if (!(+this.customerId && +this.siteId)) return;
+
+    this.initLoaderIfNeeded();
+    this.reviewsLoader.getReviews("1");
   }
 
-  loadFirstReview() {
-    if (+this.siteId && +this.customerId?.split("_")?.[0]) {
-      //again for supporting customerId_70025020 migrations
-      this.initLoaderIfNeeded();
-      this.reviewsLoader.getReviews("1");
-    }
+  setReviewsContent(reviewsHtml) {
+    this.shadow.querySelector(".reviews")?.remove();
+    this.shadow.querySelector(".pagination")?.remove();
+
+    this.shadow.innerHTML += `${(reviewsHtml || "")
+      .trim()
+      .replaceAll(`src="/images`, `src="${assetsOriginProd}/images`)
+      .replaceAll(
+        `<div class="score_stars scores_stars_review" />`,
+        `<div class="score_stars scores_stars_review"></div>`
+      )}`;
+  }
+
+  renderDefaultHtml() {
+    const emptyReviewsHtml = getEmptyReviewsHtml(this.customerId, this.siteId);
+    this.setReviewsContent(emptyReviewsHtml);
   }
 
   initLoaderIfNeeded() {
@@ -366,19 +391,6 @@ class ZapReviewsElement extends globalThis.HTMLElement {
 
       window[`reviews_reviews${this.randomId}`] = this.reviewsLoader; //so the links will work
     }
-  }
-
-  setReviewsContent(reviewsHtml) {
-    this.shadow.querySelector(".reviews")?.remove();
-    this.shadow.querySelector(".pagination")?.remove();
-
-    this.shadow.innerHTML += `${(reviewsHtml || "")
-      .trim()
-      .replaceAll(`src="/images`, `src="https://${assetsProdHost}/images`)
-      .replaceAll(
-        `<div class="score_stars scores_stars_review" />`,
-        `<div class="score_stars scores_stars_review"></div>`
-      )}`;
   }
 
   static get observedAttributes() {

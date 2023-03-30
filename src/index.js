@@ -6,9 +6,12 @@ import App from "./App";
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 
-//if real zap-reviews.js is commented in index.html, load it here for development
+//if real elements file are commented in index.html, load them here for development
 if (typeof ZapReviewsElement === "undefined") {
   import("./zap-reviews");
+}
+if (typeof ZapScoreElement === "undefined") {
+  import("./zap-score");
 }
 
 root.render(
